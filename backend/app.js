@@ -1,7 +1,9 @@
 const express = require ('express')
 const mongoose = require('mongoose');
-const SignUp = require('./models/SignUp')
+
 const booksRoutes = require('./routes/Books')
+const userRoutes = require('./routes/User')
+const path = require('path');
 
 
 const app = express()
@@ -20,19 +22,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/books', booksRoutes)
-
-
-
-app.post('/api/auth/signup', (req, res, next) => {
-  const signUp = new SignUp({...req.body})
-  signUp.save()
-  .then(()=> res.status(201).json({message:'Nouvel utilisateur enregistré'}))
-  .catch((error)=> res.status(400).json({error}))
-});
-
-
-
-
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/books', booksRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app
